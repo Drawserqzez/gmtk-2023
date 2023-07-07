@@ -46,6 +46,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 
         // TODO: Add your update logic here
         _dood.Update(gameTime);
+
         base.Update(gameTime);
     }
 
