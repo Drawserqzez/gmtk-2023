@@ -5,7 +5,7 @@ using IDrawable = ElDood.Game.Screen.IDrawable;
 
 namespace ElDood.Game.Entities;
 
-public class Dood : Entity, IDrawable {
+public class Dood : Entity, IDrawable, IPlaceable {
     private const float ScaleSize = 5f;
     private readonly Texture2D _texture;
 
@@ -21,7 +21,6 @@ public class Dood : Entity, IDrawable {
         ? SpriteEffects.FlipHorizontally 
         : SpriteEffects.None;
     public float LayerDepth => 1f;
-
 
     private float Height => _texture.Height * _scaling.Y;
     private float Width => _texture.Width * _scaling.X;
@@ -65,7 +64,7 @@ public class Dood : Entity, IDrawable {
     private void Jump() {
         if (!_isTouchingGrass) return;
 
-        _velocity.Y += -50;
+        _velocity.Y += -69;
     }
 
     public override void Draw(SpriteBatch spriteBatch) {

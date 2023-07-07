@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ElDood.Game.Debug;
 using ElDood.Game.Entities;
 using ElDood.Game.Screen;
 using System;
@@ -11,7 +12,9 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    private Texture2D _redFilledTexture;
     private Camera _mainCamera;
+    private DebugMenu _debugMenu;
     private Dood _dood;
     private Platform _platform;
 
@@ -21,6 +24,8 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _graphics.PreferredBackBufferWidth = 1600;
         _graphics.PreferredBackBufferHeight = 1200;
 
+        _graphics.ApplyChanges();
+
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
@@ -28,6 +33,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
     protected override void Initialize()
     {
         _mainCamera = new Camera(new Vector2(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight));
+
         base.Initialize();
     }
 
@@ -35,7 +41,11 @@ public class GameLoop : Microsoft.Xna.Framework.Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+        _redFilledTexture = new Texture2D(_graphics.GraphicsDevice, 1, 1);
+        _redFilledTexture.SetData(new [] { Color.Red });
+
         var doodTexture = this.Content.Load<Texture2D>("dood");
+        var debugFont = this.Content.Load<SpriteFont>("DebugFont");
 
         _dood = new Dood(new Vector2(800, 600), doodTexture);
 
@@ -44,7 +54,9 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _platform = new Platform(new Vector2(800, 600), platformTexture);
 
 
-        // TODO: use this.Content to load your game content here
+        _debugMenu = new DebugMenu(debugFont, _redFilledTexture);
+
+        _debugMenu.AddTracker(new PositionTracker(_dood));
     }
 
     protected override void Update(GameTime gameTime)
@@ -52,14 +64,18 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // TODO: Add your update logic here
+        var keyBoardState = Keyboard.GetState();
+
+        if (keyBoardState.IsKeyDown(Keys.P))
+            _debugMenu.ToggleVisibility(gameTime);
+
         _dood.Update(gameTime);
         _platform.Update(gameTime);
 
         Console.WriteLine(_dood.Collision(_platform));
 
 
-        _mainCamera.Update(gameTime, 0f);
+        _mainCamera.Update(gameTime, _dood);
         base.Update(gameTime);
     }
 
@@ -68,10 +84,10 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
         _spriteBatch.Begin();
 
-        // TODO: Add your drawing code here
         _mainCamera.Draw(_spriteBatch, gameTime, new[] { _dood });
         _platform.Draw(_spriteBatch);
 
+        _debugMenu.Draw(_spriteBatch);
         _spriteBatch.End();
         base.Draw(gameTime);
     }

@@ -13,7 +13,16 @@ public class Camera {
         _screenSize = screenSize;
     }
 
-    public void Update(GameTime gameTime, float velocityY) {
+    public void Update(GameTime gameTime, IDrawable followThis) {
+        var screenPos = CalculateScreenSpace(followThis.Position);
+
+        var velocityY = 0f;
+
+        if (screenPos.Y < _screenSize.Y * 0.25f)
+            velocityY += 5f;
+        else if (velocityY > 0f)
+            velocityY -= 2f;
+
         _position.Y += velocityY;
     }
 
