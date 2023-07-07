@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ElDood.Game.Entities;
+using ElDood.Game.Screen;
 
 namespace ElDood;
 
@@ -9,6 +10,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    private Camera _mainCamera;
     private Dood _dood;
 
     public GameLoop()
@@ -23,7 +25,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
+        _mainCamera = new Camera(new Vector2(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight));
         base.Initialize();
     }
 
@@ -34,7 +36,6 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         var doodTexture = this.Content.Load<Texture2D>("dood");
 
         _dood = new Dood(new Vector2(800, 600), doodTexture);
-
 
         // TODO: use this.Content to load your game content here
     }
@@ -47,6 +48,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         // TODO: Add your update logic here
         _dood.Update(gameTime);
 
+        _mainCamera.Update(gameTime, 0f);
         base.Update(gameTime);
     }
 
@@ -56,7 +58,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _spriteBatch.Begin();
 
         // TODO: Add your drawing code here
-        _dood.Draw(_spriteBatch);
+        _mainCamera.Draw(_spriteBatch, gameTime, new[] { _dood });
 
         _spriteBatch.End();
         base.Draw(gameTime);
