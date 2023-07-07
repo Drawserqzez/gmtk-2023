@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ElDood.Game.Entities;
 
-public class Dood {
+public class Dood : Entity {
     private readonly Texture2D _texture;
 
     private Vector2 _position;
@@ -12,14 +12,14 @@ public class Dood {
 
     private bool _isTouchingGrass;
 
-    public Dood(Vector2 startPosition, Texture2D texture) {
+    public Dood(Vector2 startPosition, Texture2D texture) : base(startPosition, texture) {
         _position = startPosition;
         _velocity = Vector2.Zero;
         _texture = texture;
         _isTouchingGrass = true;
     }
 
-    public void Update(GameTime gameTime) {
+    public override void Update(GameTime gameTime) {
         _isTouchingGrass = _position.Y + _texture.Height * 5 >= 1000;
 
         if (_isTouchingGrass) 
@@ -54,7 +54,7 @@ public class Dood {
         _velocity.Y += -50;
     }
 
-    public void Draw(SpriteBatch spriteBatch) {
+    public override void Draw(SpriteBatch spriteBatch) {
         var fx = _velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, new Vector2(5, 5), fx, 1f);
     }
