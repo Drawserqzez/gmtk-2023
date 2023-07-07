@@ -35,10 +35,15 @@ public class Dood {
         _velocity.X = 0;
 
         if (keybState.IsKeyDown(Keys.A))
-            _velocity.X -= 2f; 
+            _velocity.X -= 12f; 
 
         if (keybState.IsKeyDown(Keys.D))
-            _velocity.X += 2f; 
+            _velocity.X += 12f; 
+
+        if (_position.X > 1600)
+            _position.X = 0 - _texture.Width * 5;
+        if (_position.X + _texture.Width * 5 < 0)
+            _position.X = 1600 - _texture.Width;
 
         _position += _velocity;
     }
@@ -46,10 +51,11 @@ public class Dood {
     private void Jump() {
         if (!_isTouchingGrass) return;
 
-        _velocity.Y += -20f;
+        _velocity.Y += -50;
     }
 
     public void Draw(SpriteBatch spriteBatch) {
-        spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, new Vector2(5, 5), SpriteEffects.None, 1f);
+        var fx = _velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, new Vector2(5, 5), fx, 1f);
     }
 }
