@@ -1,16 +1,31 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using IDrawable = ElDood.Game.Screen.IDrawable;
 
 namespace ElDood.Game.Entities;
 
-public class Dood : Entity {
+public class Dood : Entity, IDrawable {
+    private const float ScaleSize = 5f;
     private readonly Texture2D _texture;
 
     private Vector2 _position;
     private Vector2 _velocity;
-
     private bool _isTouchingGrass;
+
+    public Texture2D Texture => _texture;
+    public Vector2 Position => _position;
+    public Rectangle? Source => null;
+    public float Rotation => 0f;
+    public Vector2 Scale => _scaling;
+    public SpriteEffects Effects => _velocity.X > 0 
+        ? SpriteEffects.FlipHorizontally 
+        : SpriteEffects.None;
+    public float LayerDepth => 1f;
+
+
+    private float Height => _texture.Height * _scaling.Y;
+    private float Width => _texture.Width * _scaling.X;
 
     public Dood(Vector2 startPosition, Texture2D texture) : base(startPosition, texture) {
         _position = startPosition;
@@ -20,7 +35,7 @@ public class Dood : Entity {
     }
 
     public override void Update(GameTime gameTime) {
-        _isTouchingGrass = _position.Y + _texture.Height * 5 >= 1000;
+        _isTouchingGrass = _position.Y + Height >= 1000;
 
         if (_isTouchingGrass) 
             _velocity.Y = 0f;
@@ -41,9 +56,9 @@ public class Dood : Entity {
             _velocity.X += 12f; 
 
         if (_position.X > 1600)
-            _position.X = 0 - _texture.Width * 5;
-        if (_position.X + _texture.Width * 5 < 0)
-            _position.X = 1600 - _texture.Width;
+            _position.X = 0 - Width;
+        if (_position.X + Width < 0)
+            _position.X = 1600;
 
         _position += _velocity;
     }
@@ -56,6 +71,6 @@ public class Dood : Entity {
 
     public override void Draw(SpriteBatch spriteBatch) {
         var fx = _velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-        spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, new Vector2(5, 5), fx, 1f);
+        spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, _scaling, fx, 1f);
     }
 }
