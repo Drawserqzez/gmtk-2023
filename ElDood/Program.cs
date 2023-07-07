@@ -1,3 +1,3 @@
 ﻿
-using var game = new ElDood.Game1();
+using var game = new ElDood.GameLoop();
 game.Run();

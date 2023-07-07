@@ -4,14 +4,17 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ElDood;
 
-public class Game1 : Game
+public class GameLoop : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
-    public Game1()
+    public GameLoop()
     {
         _graphics = new GraphicsDeviceManager(this);
+        _graphics.PreferredBackBufferWidth = 1600;
+        _graphics.PreferredBackBufferHeight = 1200;
+
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
