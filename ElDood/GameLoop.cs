@@ -1,10 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ElDood.Game.Debug;
 using ElDood.Game.Entities;
 using ElDood.Game.Screen;
-using System;
+using IDrawable = ElDood.Game.Screen.IDrawable;
+
 
 namespace ElDood;
 
@@ -53,10 +55,10 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 
         _platform = new Platform(new Vector2(800, 600), platformTexture);
 
-
         _debugMenu = new DebugMenu(debugFont, _redFilledTexture);
 
-        _debugMenu.AddTracker(new PositionTracker(_dood));
+        _debugMenu.AddTracker(new PositionTracker(_dood, "Dood"));
+        _debugMenu.AddTracker(new PositionTracker(_platform, "this here platform"));
     }
 
     protected override void Update(GameTime gameTime)
@@ -84,8 +86,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
         _spriteBatch.Begin();
 
-        _mainCamera.Draw(_spriteBatch, gameTime, new[] { _dood });
-        _platform.Draw(_spriteBatch);
+        _mainCamera.Draw(_spriteBatch, gameTime, new IDrawable[] { _dood, _platform });
 
         _debugMenu.Draw(_spriteBatch);
         _spriteBatch.End();

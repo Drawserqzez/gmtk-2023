@@ -1,12 +1,20 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using IDrawable = ElDood.Game.Screen.IDrawable;
 
 namespace ElDood.Game.Entities;
 
-public class Platform : Entity {
+public class Platform : Entity, IDrawable, IPlaceable {
     private const float ScaleSize = 5f;
     private readonly Texture2D _texture;
 
+    public Vector2 Position => _position;
+    public Texture2D Texture => _texture;
+    public Rectangle? Source => null;
+    public float Rotation => 0f;
+    public Vector2 Scale => _scaling;
+    public SpriteEffects Effects => SpriteEffects.None;
+    public float LayerDepth => 1f;
 
     public Platform(Vector2 startPosition, Texture2D texture) : base(startPosition, texture) {
         _position = startPosition;
@@ -15,10 +23,5 @@ public class Platform : Entity {
 
     public override void Update(GameTime gameTime) {
 
-    }
-
-    public override void Draw(SpriteBatch spriteBatch) {
-        spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, _scaling, SpriteEffects.None, 1f);
-        //spriteBatch.Draw(_texture, _position, Color.White);
     }
 }

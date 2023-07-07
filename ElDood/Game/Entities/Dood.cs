@@ -66,9 +66,4 @@ public class Dood : Entity, IDrawable, IPlaceable {
 
         _velocity.Y += -69;
     }
-
-    public override void Draw(SpriteBatch spriteBatch) {
-        var fx = _velocity.X > 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-        spriteBatch.Draw(_texture, _position, null, Color.White, 0f, Vector2.Zero, _scaling, fx, 1f);
-    }
 }

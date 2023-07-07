@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace ElDood.Game.Entities;
 
@@ -18,8 +17,6 @@ public abstract class Entity {
     }
 
     public abstract void Update(GameTime gameTime);
-
-    public abstract void Draw(SpriteBatch spriteBatch);
 
     public bool Collision(Entity other) {
         if (this._position.X < other._position.X + other._texture.Width * other._scaling.X && this._position.X + this._texture.Width * this._scaling.X > other._position.X && 
