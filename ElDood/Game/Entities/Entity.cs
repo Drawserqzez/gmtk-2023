@@ -25,7 +25,7 @@ public abstract class Entity {
         if (this._position.X < other._position.X + other._texture.Width * other._scaling.X && this._position.X + this._texture.Width * this._scaling.X > other._position.X && 
             this._position.Y < other._position.Y + other._texture.Height * other._scaling.Y && this._position.Y + this._texture.Height * this._scaling.Y > other._position.Y)
             return true;
-        Console.WriteLine($"{this._position.X}:{this._position.Y}, {other._position.X + other._texture.Width * other._scaling.X}:{other._position.Y + other._texture.Height * other._scaling.Y}");
+        //Console.WriteLine($"{this._position.X}:{this._position.Y}, {other._position.X + other._texture.Width * other._scaling.X}:{other._position.Y + other._texture.Height * other._scaling.Y}");
         return false;
     }
 }
