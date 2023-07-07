@@ -9,7 +9,6 @@ public class Dood : Entity, IDrawable {
     private const float ScaleSize = 5f;
     private readonly Texture2D _texture;
 
-    private Vector2 _position;
     private Vector2 _velocity;
     private bool _isTouchingGrass;
 
