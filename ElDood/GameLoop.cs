@@ -1,13 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ElDood.Game.Entities;
 
 namespace ElDood;
 
-public class GameLoop : Game
+public class GameLoop : Microsoft.Xna.Framework.Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    private Dood _dood;
 
     public GameLoop()
     {
@@ -22,13 +24,17 @@ public class GameLoop : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+        var doodTexture = this.Content.Load<Texture2D>("dood");
+
+        _dood = new Dood(new Vector2(800, 600), doodTexture);
+
 
         // TODO: use this.Content to load your game content here
     }
@@ -39,16 +45,19 @@ public class GameLoop : Game
             Exit();
 
         // TODO: Add your update logic here
-
+        _dood.Update(gameTime);
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
+        _spriteBatch.Begin();
 
         // TODO: Add your drawing code here
+        _dood.Draw(_spriteBatch);
 
+        _spriteBatch.End();
         base.Draw(gameTime);
     }
 }
