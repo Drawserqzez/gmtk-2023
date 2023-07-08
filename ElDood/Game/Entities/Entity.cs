@@ -8,7 +8,7 @@ namespace ElDood.Game.Entities;
 public abstract class Entity {
     private const float ScaleSize = 5f;
     private readonly Texture2D _texture;
-    protected readonly Vector2 _scaling;
+    protected Vector2 _scaling;
 
     protected Vector2 _position;
 
@@ -21,6 +21,8 @@ public abstract class Entity {
     public abstract void Update(GameTime gameTime);
 
     public bool Collision(Entity other) {
+        // Ful axis aligned bounding box collisions
+        // Behöver tekniskt sett bara kolla kollisioner med högsta pixeln på platformen
         if (this._position.X < other._position.X + other._texture.Width * other._scaling.X && this._position.X + this._texture.Width * this._scaling.X > other._position.X && 
             this._position.Y < other._position.Y + other._texture.Height * other._scaling.Y && this._position.Y + this._texture.Height * this._scaling.Y > other._position.Y)
             return true;

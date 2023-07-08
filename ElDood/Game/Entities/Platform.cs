@@ -19,9 +19,10 @@ public class Platform : Entity, IDrawable, IPlaceable, ICollidable {
     public float Height => _texture.Height * _scaling.Y;
     public float Width => _texture.Width * _scaling.X;
 
-    public Platform(Vector2 startPosition, Texture2D texture) : base(startPosition, texture) {
+    public Platform(Vector2 startPosition, Texture2D texture, Vector2 scaling) : base(startPosition, texture) {
         _position = startPosition;
         _texture = texture;
+        _scaling = scaling;
     }
 
     public override void Update(GameTime gameTime) {

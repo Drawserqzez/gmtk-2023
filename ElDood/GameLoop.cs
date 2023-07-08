@@ -8,7 +8,7 @@ using ElDood.Game.Entities;
 using ElDood.Game.Screen;
 using ElDood.Game.Screen.UI;
 using IDrawable = ElDood.Game.Screen.IDrawable;
-
+using System.Collections.Generic;
 
 namespace ElDood;
 
@@ -22,6 +22,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
     private DebugMenu _debugMenu;
     private Dood _dood;
     private Platform _platform;
+    private Platform _ground;
 
     public GameLoop()
     {
@@ -56,7 +57,10 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 
         var platformTexture = this.Content.Load<Texture2D>("platform");
 
-        _platform = new Platform(new Vector2(800, 600), platformTexture);
+        _platform = new Platform(new Vector2(800, 600), platformTexture, new Vector2(5, 5));
+
+        _ground = new Platform(new Vector2(-50, 800), platformTexture, new Vector2(50, 10));
+        
 
         _debugMenu = new DebugMenu(debugFont, _redFilledTexture);
 
@@ -82,10 +86,16 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _dood.Update(gameTime);
         _platform.Update(gameTime);
 
-        Console.WriteLine(_dood.Collision(_platform));
+        _ground.Update(gameTime);
+
+        //Console.WriteLine(_dood.Collision(_platform));
         
         if (_dood.Collision(_platform)) {
             _dood.PushOut(_platform);
+        }
+
+        if (_dood.Collision(_ground)) {
+            _dood.PushOut(_ground);
         }
         
 
@@ -99,7 +109,8 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         GraphicsDevice.Clear(Color.CornflowerBlue);
         _spriteBatch.Begin();
 
-        _mainCamera.Draw(_spriteBatch, gameTime, new IDrawable[] { _dood, _platform });
+        _mainCamera.Draw(_spriteBatch, gameTime, new IDrawable[] { _dood, _platform, _ground });
+        
 
         _debugMenu.Draw(_spriteBatch);
 

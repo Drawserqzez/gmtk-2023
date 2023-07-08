@@ -33,6 +33,7 @@ public class Dood : Entity, IDrawable, IPlaceable, ICollidable {
     }
 
     public override void Update(GameTime gameTime) {
+
         _isTouchingGrass = _position.Y + Height >= 1000;
 
         if (_isTouchingGrass) 
@@ -65,6 +66,7 @@ public class Dood : Entity, IDrawable, IPlaceable, ICollidable {
         if (!_isTouchingGrass) return;
 
         _velocity.Y += -40;
+        _isTouchingGrass = false;
     }
 
     public bool Collides(ICollidable other) {
@@ -72,9 +74,12 @@ public class Dood : Entity, IDrawable, IPlaceable, ICollidable {
     }
 
     public override void PushOut(Entity other) {
-        base.PushOut(other);
-        _isTouchingGrass = true;
-        _velocity.Y = 0f;
-
+        // Behöver bara putta ut den när den faller neråt
+        // Dood kan nu hoppa genom plattformar från undersidan
+        if (_velocity.Y >= 0) {
+            base.PushOut(other);
+            _isTouchingGrass = true;
+            _velocity.Y = 0f;
+        }
     }
 }
