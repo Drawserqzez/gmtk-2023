@@ -45,7 +45,7 @@ public class Dood : Entity, IDrawable, IPlaceable, ICollidable {
 
         if (keybState.IsKeyDown(Keys.Space))
             Jump();
-
+        
         _velocity.X = 0;
 
         if (keybState.IsKeyDown(Keys.A))

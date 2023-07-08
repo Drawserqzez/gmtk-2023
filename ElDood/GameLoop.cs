@@ -59,7 +59,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 
         _platform = new Platform(new Vector2(800, 600), platformTexture, new Vector2(5, 5));
 
-        _ground = new Platform(new Vector2(-50, 800), platformTexture, new Vector2(50, 10));
+        _ground = new Platform(new Vector2(-50, 800), platformTexture, new Vector2(50, 25));
         
 
         _debugMenu = new DebugMenu(debugFont, _redFilledTexture);
