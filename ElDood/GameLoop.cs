@@ -75,6 +75,11 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _platform.Update(gameTime);
 
         Console.WriteLine(_dood.Collision(_platform));
+        /*
+        if (_dood.Collision(_platform)) {
+            _dood.PushOut(_platform);
+        }
+        */
 
 
         _mainCamera.Update(gameTime, _dood);
