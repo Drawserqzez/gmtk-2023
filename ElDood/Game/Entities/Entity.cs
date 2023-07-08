@@ -32,6 +32,8 @@ public abstract class Entity {
     public virtual void PushOut(Entity other) {
         // Calculate Dood centre
         Vector2 DoodCentre = new Vector2(this._position.X + this._texture.Width * this._scaling.X * 0.5f, this._position.Y + this._texture.Height * this._scaling.Y * 0.5f);
+        // to make the platforming more enjoyable, move the "centre" to the top of the sprite
+        //Vector2 DoodCentre = new Vector2(this._position.X + this._texture.Width * this._scaling.X * 0.5f, this._position.Y);
         // Calculate Entity centre
         Vector2 EntityCentre = new Vector2(other._position.X + other._texture.Width * other._scaling.X * 0.5f, other._position.Y + other._texture.Height * other._scaling.Y * 0.5f);
         // Calculate the vector from Entity centre to Dood centre
@@ -40,13 +42,15 @@ public abstract class Entity {
         Console.WriteLine("" + DoodCentre + ":" + EntityCentre + ":" + Resultant);
 
         // atan2(Y, X)
-        double theta = -Math.Atan2(Resultant.Y, Resultant.X);
+        double theta = Math.Atan2(Resultant.Y, Resultant.X);
         Console.WriteLine("" + theta);
-        Console.WriteLine("" + 3*Math.PI/4 + ":" + Math.PI/4);        
+        Console.WriteLine("" + -Math.PI/4 + ":" + -3*Math.PI/4);        
         
         
-        // If DoodCentre is over the platform => (135 deg < theta > 45 deg) => (3pi/4 < theta > pi/4), push it up
-        if (3 * Math.PI / 4 < theta && theta > Math.PI / 4) {
+        // If DoodCentre is over the platform => (135 deg > theta > 45 deg) => (3pi/4 > theta > pi/4), push it up
+        // This is wrong because the coord-plane is flipped vertically =>
+        // DoodCentre is over the platform if (315 deg > theta > 225 deg) => (7pi/4 > theta > 5pi/4) => (-pi/4 > theta > -3pi/4)
+        if (- Math.PI / 4 > theta && theta > -3 * Math.PI / 4) {
             this._position.Y = other._position.Y - this._texture.Height * this._scaling.Y;
         }
         

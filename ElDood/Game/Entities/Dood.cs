@@ -65,6 +65,13 @@ public class Dood : Entity, IDrawable, IPlaceable {
     private void Jump() {
         if (!_isTouchingGrass) return;
 
-        _velocity.Y += -69;
+        _velocity.Y += -40;
+    }
+
+    public override void PushOut(Entity other) {
+        base.PushOut(other);
+        _isTouchingGrass = true;
+        _velocity.Y = 0f;
+
     }
 }
