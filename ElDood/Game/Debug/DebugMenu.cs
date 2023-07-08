@@ -30,7 +30,7 @@ public class DebugMenu {
     public void Draw(SpriteBatch spriteBatch) {
         if (!_display) return;
 
-        var boxRectangle = new Rectangle(0, 0, _debugInfos.Max(x => x.InfoText.Length) + 180, _debugInfos.Count * 25);
+        var boxRectangle = new Rectangle(0, 0, _debugInfos.Max(x => x.InfoText.Length) + 128, _debugInfos.Count * 25);
 
         spriteBatch.Draw(_filledTexture, boxRectangle, Color.White);
 

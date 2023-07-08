@@ -6,6 +6,7 @@ using ElDood.Game.Debug;
 using ElDood.Game.Debug.Trackers;
 using ElDood.Game.Entities;
 using ElDood.Game.Screen;
+using ElDood.Game.Screen.UI;
 using IDrawable = ElDood.Game.Screen.IDrawable;
 
 
@@ -17,6 +18,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
     private SpriteBatch _spriteBatch;
     private Texture2D _redFilledTexture;
     private Camera _mainCamera;
+    private UiManager _uiManager;
     private DebugMenu _debugMenu;
     private Dood _dood;
     private Platform _platform;
@@ -61,6 +63,10 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _debugMenu.AddTracker(new PositionTracker(_dood, "Dood"));
         _debugMenu.AddTracker(new PositionTracker(_platform, "this here platform"));
         _debugMenu.AddTracker(new CollisionTracker(_dood, _platform));
+
+        var quitButton = new Button(new Rectangle(1140, 0, 60, 30),
+                _redFilledTexture, "Quit game LOL", new Action(() => Exit()), debugFont);
+        _uiManager = new UiManager(new [] { quitButton });
     }
 
     protected override void Update(GameTime gameTime)
@@ -96,6 +102,8 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _mainCamera.Draw(_spriteBatch, gameTime, new IDrawable[] { _dood, _platform });
 
         _debugMenu.Draw(_spriteBatch);
+
+        _uiManager.Draw(_spriteBatch, gameTime);
         _spriteBatch.End();
         base.Draw(gameTime);
     }
