@@ -1,6 +1,6 @@
 using ElDood.Game.Entities;
 
-namespace ElDood.Game.Debug;
+namespace ElDood.Game.Debug.Trackers;
 
 public class PositionTracker : IDebugInfo {
     private readonly IPlaceable _target;

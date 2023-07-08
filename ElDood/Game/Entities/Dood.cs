@@ -2,11 +2,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using IDrawable = ElDood.Game.Screen.IDrawable;
-using System;
 
 namespace ElDood.Game.Entities;
 
-public class Dood : Entity, IDrawable, IPlaceable {
+public class Dood : Entity, IDrawable, IPlaceable, ICollidable {
     private const float ScaleSize = 5f;
     private readonly Texture2D _texture;
 
@@ -23,8 +22,8 @@ public class Dood : Entity, IDrawable, IPlaceable {
         : SpriteEffects.None;
     public float LayerDepth => 1f;
 
-    private float Height => _texture.Height * _scaling.Y;
-    private float Width => _texture.Width * _scaling.X;
+    public float Height => _texture.Height * _scaling.Y;
+    public float Width => _texture.Width * _scaling.X;
 
     public Dood(Vector2 startPosition, Texture2D texture) : base(startPosition, texture) {
         _position = startPosition;
@@ -66,6 +65,10 @@ public class Dood : Entity, IDrawable, IPlaceable {
         if (!_isTouchingGrass) return;
 
         _velocity.Y += -40;
+    }
+
+    public bool Collides(ICollidable other) {
+        return base.Collision(other as Entity); // todo: fulcast
     }
 
     public override void PushOut(Entity other) {

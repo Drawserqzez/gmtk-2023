@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ElDood.Game.Debug;
+using ElDood.Game.Debug.Trackers;
 using ElDood.Game.Entities;
 using ElDood.Game.Screen;
 using IDrawable = ElDood.Game.Screen.IDrawable;
@@ -59,6 +60,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 
         _debugMenu.AddTracker(new PositionTracker(_dood, "Dood"));
         _debugMenu.AddTracker(new PositionTracker(_platform, "this here platform"));
+        _debugMenu.AddTracker(new CollisionTracker(_dood, _platform));
     }
 
     protected override void Update(GameTime gameTime)

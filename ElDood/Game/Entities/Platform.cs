@@ -4,7 +4,7 @@ using IDrawable = ElDood.Game.Screen.IDrawable;
 
 namespace ElDood.Game.Entities;
 
-public class Platform : Entity, IDrawable, IPlaceable {
+public class Platform : Entity, IDrawable, IPlaceable, ICollidable {
     private const float ScaleSize = 5f;
     private readonly Texture2D _texture;
 
@@ -16,6 +16,9 @@ public class Platform : Entity, IDrawable, IPlaceable {
     public SpriteEffects Effects => SpriteEffects.None;
     public float LayerDepth => 1f;
 
+    public float Height => _texture.Height * _scaling.Y;
+    public float Width => _texture.Width * _scaling.X;
+
     public Platform(Vector2 startPosition, Texture2D texture) : base(startPosition, texture) {
         _position = startPosition;
         _texture = texture;
@@ -23,5 +26,9 @@ public class Platform : Entity, IDrawable, IPlaceable {
 
     public override void Update(GameTime gameTime) {
 
+    }
+
+    public bool Collides(ICollidable other) {
+        return base.Collision(other as Entity); // todo: fulcast 
     }
 }
