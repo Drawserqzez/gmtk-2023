@@ -34,7 +34,8 @@ public class Dood : Entity, IDrawable, IPlaceable, ICollidable {
 
     public override void Update(GameTime gameTime) {
 
-        _isTouchingGrass = _position.Y + Height >= 1000;
+        //_isTouchingGrass = _position.Y + Height >= 1000;
+
 
         if (_isTouchingGrass) 
             _velocity.Y = 0f;
