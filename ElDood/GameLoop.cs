@@ -114,7 +114,6 @@ public class GameLoop : Microsoft.Xna.Framework.Game
             // This is such an ugly way of doing it
             var realSpacePos = _mainCamera.ReverseScreenSpace(new Vector2(_thisMouse.X, _thisMouse.Y));
             _platform.AddPlatform(_platforms, realSpacePos);
-            Console.WriteLine("Adding platform");
 
         }
         _prevMouse = _thisMouse;
