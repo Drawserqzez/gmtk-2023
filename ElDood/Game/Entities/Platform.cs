@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using IDrawable = ElDood.Game.Screen.IDrawable;
 
 namespace ElDood.Game.Entities;
@@ -31,5 +34,10 @@ public class Platform : Entity, IDrawable, IPlaceable, ICollidable {
 
     public bool Collides(ICollidable other) {
         return base.Collision(other as Entity); // todo: fulcast 
+    }
+
+    public void AddPlatform(List<Platform> platforms, Vector2 realSpacePos) {
+
+        platforms.Add(new Platform(new Vector2(realSpacePos.X - Width * 0.5f, realSpacePos.Y - Height * 0.5f), _texture, _scaling));
     }
 }

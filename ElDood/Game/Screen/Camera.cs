@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -56,6 +57,12 @@ public class Camera {
         var x = _position.X + realSpacePos.X;
         var y = _position.Y + realSpacePos.Y;
 
+        return new Vector2(x, y);
+    }
+
+    public Vector2 ReverseScreenSpace(Vector2 screenSpacePosition) {
+        var x = screenSpacePosition.X - _position.X;
+        var y = screenSpacePosition.Y - _position.Y;
         return new Vector2(x, y);
     }
 }

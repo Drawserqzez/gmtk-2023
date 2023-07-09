@@ -1,7 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-// For math
-using System;
 
 namespace ElDood.Game.Entities;
 
