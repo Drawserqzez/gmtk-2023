@@ -19,7 +19,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
     private SpriteBatch _spriteBatch;
     private Texture2D _redFilledTexture;
     private Camera _mainCamera;
-    //private UiManager _uiManager;
+    private UiManager _uiManager;
     private DebugMenu _debugMenu;
     private Dood _dood;
     private Platform _platform;
@@ -28,7 +28,8 @@ public class GameLoop : Microsoft.Xna.Framework.Game
     private List<Platform> _placedPlatforms;
     private MouseState _thisMouse;
     private MouseState _prevMouse;
-    private Int64 _points;
+    private double _points;
+    private bool _end = false;
 
     public GameLoop()
     {
@@ -81,8 +82,8 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _debugMenu.AddTracker(new CollisionTracker(_dood, _platform));
 
         //var quitButton = new Button(new Rectangle(1140, 0, 60, 30), _redFilledTexture, "Quit game LOL", new Action(() => Exit()), debugFont);
-        //var pointButton = new Button(new Rectangle(1400, 0, 100, 50), _redFilledTexture, $"Points: {_dood.Position.Y}", new Action(() => Exit()), debugFont);
-        //_uiManager = new UiManager(new [] { quitButton });
+        //var pointButton = new Button(new Rectangle(700, 0, 200, 50), _redFilledTexture, $"Points: {_dood.Position.Y}", new Action(() => Exit()), debugFont);
+        //_uiManager = new UiManager(new [] { });
 
         _thisMouse = Mouse.GetState();
         _prevMouse = _thisMouse;
@@ -94,20 +95,25 @@ public class GameLoop : Microsoft.Xna.Framework.Game
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || _dood.Position.Y > -_points + 2000)
         {
-            Exit();
-            Console.WriteLine($"You scored {_points} Points!");
+            _end = true; 
+            var debugFont = this.Content.Load<SpriteFont>("DebugFont");
+            var pointButton = new Button(new Rectangle(800, 600, 200, 50), _redFilledTexture, $"Points: {Math.Truncate(_points)}", new Action(() => Exit()), debugFont);
+            _uiManager = new UiManager(new [] { pointButton });
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
 
         }
 
-        _points = Math.Max(_points, 600 - Convert.ToInt32(Math.Round(_dood.Position.Y, 0)));
+        _points = Math.Max(_points, 600 - _dood.Position.Y);
 
 
-        //var keyBoardState = Keyboard.GetState();
+        var keyBoardState = Keyboard.GetState();
 
-        /*
+        
         if (keyBoardState.IsKeyDown(Keys.P))
             _debugMenu.ToggleVisibility(gameTime);
-        */
+        
 
         
         //Console.WriteLine(_dood.Collision(_platform));
@@ -173,8 +179,8 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         
 
         _debugMenu.Draw(_spriteBatch);
-
-        //_uiManager.Draw(_spriteBatch, gameTime);
+        if (_end)
+            _uiManager.Draw(_spriteBatch, gameTime);
         _spriteBatch.End();
         base.Draw(gameTime);
     }
