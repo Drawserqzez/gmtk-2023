@@ -25,8 +25,10 @@ public class GameLoop : Microsoft.Xna.Framework.Game
     private Platform _platform;
     private Platform _ground;
     private List<Platform> _platforms;
+    private List<Platform> _placedPlatforms;
     private MouseState _thisMouse;
     private MouseState _prevMouse;
+    private Int64 _points;
 
     public GameLoop()
     {
@@ -57,17 +59,19 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         var doodTexture = this.Content.Load<Texture2D>("dood");
         var debugFont = this.Content.Load<SpriteFont>("DebugFont");
 
-        _dood = new Dood(new Vector2(800, 600), doodTexture);
+        _dood = new Dood(new Vector2(100, 600), doodTexture);
 
         var platformTexture = this.Content.Load<Texture2D>("platform");
 
-        _platform = new Platform(new Vector2(800, 600), platformTexture, new Vector2(5, 5));
+        _platform = new Platform(new Vector2(-1000, 1200), platformTexture, new Vector2(5, 5));
 
-        _ground = new Platform(new Vector2(-300, 1000), platformTexture, new Vector2(75, 25));
+        _ground = new Platform(new Vector2(-550, 1000), platformTexture, new Vector2(75, 5));
 
         _platforms = new List<Platform>();
         _platforms.Add(_ground);
         _platforms.Add(_platform);
+
+        _placedPlatforms = new List<Platform>();
         
 
         _debugMenu = new DebugMenu(debugFont, _redFilledTexture);
@@ -78,23 +82,34 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 
         var quitButton = new Button(new Rectangle(1140, 0, 60, 30),
                 _redFilledTexture, "Quit game LOL", new Action(() => Exit()), debugFont);
+        //var pointButton = new Button(new Rectangle(1400, 0, 100, 50), _redFilledTexture, $"Points: {_dood.Position.Y}", new Action(() => Exit()), debugFont);
         _uiManager = new UiManager(new [] { quitButton });
 
         _thisMouse = Mouse.GetState();
         _prevMouse = _thisMouse;
+
+        _points = 0;
     }
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape) || _dood.Position.Y > -_points + 2000)
+        {
             Exit();
+            Console.WriteLine($"You scored {_points} Points!");
+
+        }
+
+        _points = Math.Max(_points, 600 - Convert.ToInt64(_dood.Position.Y));
+
 
         var keyBoardState = Keyboard.GetState();
 
         if (keyBoardState.IsKeyDown(Keys.P))
             _debugMenu.ToggleVisibility(gameTime);
 
-        _dood.Update(gameTime);
+
+        
         //Console.WriteLine(_dood.Collision(_platform));
 
         foreach (var platform in _platforms)
@@ -106,7 +121,10 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 
             if (_dood.Collision(platform))
                 _dood.PushOut(platform);
+                _dood.AutoJump(platform);
         }
+    
+        _dood.Update(gameTime);
 
         
         if (_thisMouse.LeftButton == ButtonState.Pressed && _prevMouse.LeftButton == ButtonState.Released)
@@ -114,7 +132,8 @@ public class GameLoop : Microsoft.Xna.Framework.Game
             // This is such an ugly way of doing it
             var realSpacePos = _mainCamera.ReverseScreenSpace(new Vector2(_thisMouse.X, _thisMouse.Y));
             _platform.AddPlatform(_platforms, realSpacePos);
-
+            if (_platforms.Count >= 6)
+                _platforms.RemoveAt(2);
         }
         _prevMouse = _thisMouse;
         _thisMouse = Mouse.GetState();

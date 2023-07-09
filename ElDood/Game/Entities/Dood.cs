@@ -38,13 +38,13 @@ public class Dood : Entity, IDrawable, IPlaceable, ICollidable {
 
         if (_isTouchingGrass) 
             _velocity.Y = 0f;
-        else 
-            _velocity.Y += 1.5f;
+        else if (_velocity.Y < Math.Max(Position.Y * Position.Y/500, 10))
+            _velocity.Y += .75f + Convert.ToSingle(Math.Log10(Math.Log2(Math.Abs(Position.Y))));
 
-        var keybState = Keyboard.GetState();
+        //var keybState = Keyboard.GetState();
 
         //if (keybState.IsKeyDown(Keys.Space))
-        AutoJump();
+        //AutoJump();
 
         /*
         _velocity.X = 0;
@@ -90,24 +90,48 @@ public class Dood : Entity, IDrawable, IPlaceable, ICollidable {
             _isTouchingGrass = false;
     }
 
-    private void AutoJump() {
+    public void AutoJump(Platform platform) {
         if (!_isTouchingGrass) return;
-        var rand = new Random();
-        // Make the direction more likely to bounce toward the centre
-        double Multiplier = rand.NextDouble() - 0.5f - (this._position.X - 800)/2400;
+        if (_velocity.Y < 0f) return;
 
+        int Choice = 2;
+        double Direction;
+        double Multiplier = 0;
+
+        // Choice == 2 gives a different control scheme where dood jumps based on how far from the centre of the platform
+        // he collides with is from his centre, kind of like reverse pong. If it collides to the right of the platform centre, he goes to the left.
+        if (Choice == 2) {
+            // Control direction based on how close to the center of the platform you hit
+            Vector2 DoodPoint = new Vector2(this._position.X + Width * 0.5f, this._position.Y + Height * 0.5f);
+            Vector2 PlatformCentre = new Vector2(platform.Position.X + platform.Width * 0.5f, platform.Position.Y + platform.Height * 0.5f);
+            Vector2 Resultant = new Vector2(DoodPoint.X - PlatformCentre.X, DoodPoint.Y - PlatformCentre.Y);
+
+            //Console.WriteLine("" + DoodPoint + ":" + PlatformCentre + ":" + Resultant);
+
+            // atan2(Y, X)
+            Multiplier = Math.Atan2(Resultant.Y, -Resultant.X) * 2/ Math.PI + 1f;
+        }
+
+        if (Choice == 1) {
+            var rand = new Random();
+            // Make the direction more likely to bounce toward the centre
+            Multiplier = rand.NextDouble() - 0.5f - (this._position.X - 800)/2400;
+            //Console.WriteLine(platform.Position.X + ":" + platform.Position.Y);
+        }
         // Span slowly expands as Dood gets higher, increasing chaos of movement
         double Span = Math.Min(3, 7 - Math.Log10(Math.Log10(1000-this._position.Y)));
 
         // Choose direction to jump in, with a span centered around -Y axis
-        double Direction = Math.PI * Multiplier / Span + Math.PI / 2;
+        Direction = Math.PI * Multiplier / Span + Math.PI / 2;
+
         _velocity = Vector2.Zero;
 
-        _velocity.X += Convert.ToSingle(Math.Cos(Direction)) * -50f;
-        _velocity.Y += Convert.ToSingle(Math.Sin(Direction)) * -50f;
+        _velocity.X += Convert.ToSingle(Math.Cos(Direction)) * -45f;
+        _velocity.Y += Convert.ToSingle(Math.Sin(Direction)) * -45f;
 
         //Console.WriteLine(_velocity + ":" + Direction + ":" + Multiplier);
         //Console.WriteLine(7 - Math.Log10(Math.Log10(1000-this._position.Y)));
         _isTouchingGrass = false;
+        
     }
 }
