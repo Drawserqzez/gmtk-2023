@@ -59,7 +59,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 
         _platform = new Platform(new Vector2(800, 600), platformTexture, new Vector2(5, 5));
 
-        _ground = new Platform(new Vector2(-50, 800), platformTexture, new Vector2(50, 25));
+        _ground = new Platform(new Vector2(-300, 1000), platformTexture, new Vector2(75, 25));
         
 
         _debugMenu = new DebugMenu(debugFont, _redFilledTexture);
@@ -89,10 +89,15 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _ground.Update(gameTime);
 
         //Console.WriteLine(_dood.Collision(_platform));
+
+        if (!_dood.Collision(_platform) || !_dood.Collision(_ground)) {
+            _dood.Gravity();
+        }
         
         if (_dood.Collision(_platform)) {
             _dood.PushOut(_platform);
         }
+        
 
         if (_dood.Collision(_ground)) {
             _dood.PushOut(_ground);

@@ -33,7 +33,7 @@ public abstract class Entity {
     
     // Will only be used by Dood on Other entities(Platforms) 
     public virtual void PushOut(Entity other) {
-        /* 
+        /*
         // Calculate Dood centre
         Vector2 DoodCentre = new Vector2(this._position.X + this._texture.Width * this._scaling.X * 0.5f, this._position.Y + this._texture.Height * this._scaling.Y * 0.5f);
         // to make the platforming more enjoyable, move the "centre" to the top of the sprite
@@ -41,6 +41,7 @@ public abstract class Entity {
         // Calculate Entity centre
         Vector2 EntityCentre = new Vector2(other._position.X + other._texture.Width * other._scaling.X * 0.5f, other._position.Y + other._texture.Height * other._scaling.Y * 0.5f);
         // Calculate the vector from Entity centre to Dood centre
+        
         Vector2 Resultant = new Vector2(DoodCentre.X - EntityCentre.X, DoodCentre.Y - EntityCentre.Y);
 
         Console.WriteLine("" + DoodCentre + ":" + EntityCentre + ":" + Resultant);
@@ -57,8 +58,30 @@ public abstract class Entity {
             this._position.Y = other._position.Y - this._texture.Height * this._scaling.Y;
         }
         */
-        if (this._position.Y + this._texture.Height * this._scaling.Y >= other._position.Y)
+        //float OverlapX = (this._position.X + this._texture.Width * this._scaling.X) - (other._position.X);
+        //float OverlapY = (this._position.Y + this._texture.Height * this._scaling.Y) - (other._position.Y);
+        /*float OverlapX = Math.Max(this._position.X + this._texture.Width * this._scaling.X - other._position.X, this._position.X - (other._position.X + other._texture.Width * other._scaling.X));
+        float OverlapY = Math.Max(this._position.Y + this._texture.Height * this._scaling.Y - other._position.Y, this._position.Y - other._position.Y - other._texture.Height * other._scaling.Y);
+        if (Math.Abs(OverlapY) < Math.Abs(OverlapX)) {
+            this._position.Y -= OverlapY;
+        }
+        else {
+            this._position.X -= OverlapX;
+        }
+        */
+        // fixes Y position
+        if (this._position.Y + this._texture.Height * this._scaling.Y > other._position.Y) {
             this._position.Y = other._position.Y - this._texture.Height * this._scaling.Y;
+        }
+
+        // check if we're still colliding, if so fix X position
+        if (this.Collision(other)) {
+            if (this._position.X + this._texture.Width * this._scaling.X > other._position.X)
+                this._position.X = other._position.X - this._texture.Width * this._scaling.X;
+            if (this._position.X < other._position.X + other._texture.Width * other._scaling.X)
+                this._position.X = other._position.X + other._texture.Width * other._scaling.X;
+        }
+        
         
     }
 }
