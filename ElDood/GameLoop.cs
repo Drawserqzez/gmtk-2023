@@ -59,7 +59,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         var doodTexture = this.Content.Load<Texture2D>("dood");
         var debugFont = this.Content.Load<SpriteFont>("DebugFont");
 
-        _dood = new Dood(new Vector2(100, 600), doodTexture);
+        _dood = new Dood(new Vector2(200, 600), doodTexture);
 
         var platformTexture = this.Content.Load<Texture2D>("platform");
 
@@ -80,10 +80,9 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _debugMenu.AddTracker(new PositionTracker(_platform, "this here platform"));
         _debugMenu.AddTracker(new CollisionTracker(_dood, _platform));
 
-        var quitButton = new Button(new Rectangle(1140, 0, 60, 30),
-                _redFilledTexture, "Quit game LOL", new Action(() => Exit()), debugFont);
+        //var quitButton = new Button(new Rectangle(1140, 0, 60, 30), _redFilledTexture, "Quit game LOL", new Action(() => Exit()), debugFont);
         //var pointButton = new Button(new Rectangle(1400, 0, 100, 50), _redFilledTexture, $"Points: {_dood.Position.Y}", new Action(() => Exit()), debugFont);
-        _uiManager = new UiManager(new [] { quitButton });
+        //_uiManager = new UiManager(new [] { quitButton });
 
         _thisMouse = Mouse.GetState();
         _prevMouse = _thisMouse;
@@ -172,9 +171,9 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _mainCamera.Draw(_spriteBatch, gameTime, new IDrawable[] { _dood }.Concat(_platforms));
         
 
-        _debugMenu.Draw(_spriteBatch);
+        //_debugMenu.Draw(_spriteBatch);
 
-        _uiManager.Draw(_spriteBatch, gameTime);
+        //_uiManager.Draw(_spriteBatch, gameTime);
         _spriteBatch.End();
         base.Draw(gameTime);
     }
