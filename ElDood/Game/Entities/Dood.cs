@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -40,13 +41,14 @@ public class Dood : Entity, IDrawable, IPlaceable, ICollidable {
         if (_isTouchingGrass) 
             _velocity.Y = 0f;
         else 
-            _velocity.Y += 2f;
+            _velocity.Y += 1.5f;
 
         var keybState = Keyboard.GetState();
 
-        if (keybState.IsKeyDown(Keys.Space))
-            Jump();
-        
+        //if (keybState.IsKeyDown(Keys.Space))
+        AutoJump();
+
+        /*
         _velocity.X = 0;
 
         if (keybState.IsKeyDown(Keys.A))
@@ -54,6 +56,7 @@ public class Dood : Entity, IDrawable, IPlaceable, ICollidable {
 
         if (keybState.IsKeyDown(Keys.D))
             _velocity.X += 12f; 
+        */
 
         if (_position.X > 1600)
             _position.X = 0 - Width;
@@ -87,5 +90,27 @@ public class Dood : Entity, IDrawable, IPlaceable, ICollidable {
     public void Gravity() {
         if (_velocity.Y == 0f)
             _isTouchingGrass = false;
+    }
+
+    private void AutoJump() {
+        if (!_isTouchingGrass) return;
+        var rand = new Random();
+        // Make the direction more likely to bounce toward the centre
+        double Multiplier = rand.NextDouble() - 0.5f - (this._position.X - 800)/2400;
+
+        // Span slowly expands as Dood gets higher, increasing chaos of movement
+        double Span = Math.Min(3, 7 - Math.Log10(Math.Log10(1000-this._position.Y)));
+
+        // Choose direction to jump in, with a span centered around -Y axis
+        double Direction = Math.PI * Multiplier / Span + Math.PI / 2;
+        _velocity = Vector2.Zero;
+
+        _velocity.X += Convert.ToSingle(Math.Cos(Direction)) * -50f;
+        _velocity.Y += Convert.ToSingle(Math.Sin(Direction)) * -50f;
+
+        Console.WriteLine(_velocity + ":" + Direction + ":" + Multiplier);
+        Console.WriteLine(7 - Math.Log10(Math.Log10(1000-this._position.Y)));
+        _isTouchingGrass = false;
+
     }
 }
