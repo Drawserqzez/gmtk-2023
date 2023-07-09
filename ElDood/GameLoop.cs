@@ -19,7 +19,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
     private SpriteBatch _spriteBatch;
     private Texture2D _redFilledTexture;
     private Camera _mainCamera;
-    private UiManager _uiManager;
+    //private UiManager _uiManager;
     private DebugMenu _debugMenu;
     private Dood _dood;
     private Platform _platform;
@@ -99,14 +99,15 @@ public class GameLoop : Microsoft.Xna.Framework.Game
 
         }
 
-        _points = Math.Max(_points, 600 - Convert.ToInt64(_dood.Position.Y));
+        _points = Math.Max(_points, 600 - Convert.ToInt32(Math.Round(_dood.Position.Y, 0)));
 
 
-        var keyBoardState = Keyboard.GetState();
+        //var keyBoardState = Keyboard.GetState();
 
+        /*
         if (keyBoardState.IsKeyDown(Keys.P))
             _debugMenu.ToggleVisibility(gameTime);
-
+        */
 
         
         //Console.WriteLine(_dood.Collision(_platform));
@@ -171,7 +172,7 @@ public class GameLoop : Microsoft.Xna.Framework.Game
         _mainCamera.Draw(_spriteBatch, gameTime, new IDrawable[] { _dood }.Concat(_platforms));
         
 
-        //_debugMenu.Draw(_spriteBatch);
+        _debugMenu.Draw(_spriteBatch);
 
         //_uiManager.Draw(_spriteBatch, gameTime);
         _spriteBatch.End();
