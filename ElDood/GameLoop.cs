@@ -98,7 +98,8 @@ public class GameLoop : Microsoft.Xna.Framework.Game
             _end = true; 
             var debugFont = this.Content.Load<SpriteFont>("DebugFont");
             var pointButton = new Button(new Rectangle(800, 600, 200, 50), _redFilledTexture, $"Points: {Math.Truncate(_points)}", new Action(() => Exit()), debugFont);
-            _uiManager = new UiManager(new [] { pointButton });
+            var exitButton = new Button(new Rectangle(800, 700, 200, 50), _redFilledTexture, "Press Esc to exit.", new Action(() => Exit()), debugFont);
+            _uiManager = new UiManager(new [] { pointButton, exitButton });
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
